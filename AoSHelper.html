@@ -3,6 +3,7 @@
 
 <head>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script src="./DiceRoller.js"></script>
   <title>AnyDice Test</title>
   <style>
 
@@ -676,6 +677,11 @@ var launch = () => {
 	`;
 	xhr.send("program="+encodeURIComponent(program));
 }
+
+
+const diceRoller = new DiceRoller().roll(30);
+
+const labels = Array.from(new Array(31), (_,i) => i);
 var resultChart = document.querySelector('#result').getContext('2d');
 resultChart.clearRect(0, 0, document.querySelector('#result').width, document.querySelector('#result').height);
 var chartResult = new Chart(resultChart, {
@@ -684,7 +690,11 @@ var chartResult = new Chart(resultChart, {
 
 	// The data for our dataset
 	data: {
-		datasets: []
+		labels : labels,
+		datasets: [{
+			label: 'test',
+			data: diceRoller.success(4).success(4).fail(2).result(),
+		}]
 	},
 
 	// Configuration options go here
