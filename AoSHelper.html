@@ -3,37 +3,23 @@
 
 <head>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script src="https://unpkg.com/chartjs-chart-box-and-violin-plot@2/build/Chart.BoxPlot.js"></script>
   <script src="./DiceRoller.js"></script>
   <script src="./review.js"></script>
+  <script src="./unit.js"></script>
   <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./button.css" />
   <title>Aos Helper</title>
 </head>
 
 <body  style="width:95vw; height:95vh;">
 <div style = "display: flex; flex-direction: column; height: 100%" >
-  <div style="padding: 2; width: 100%; display: inline-flex; flex-wrap: wrap; flex-grow:0;">
-    <div style="padding: 2; flex-grow:1;">
-      <div class="container" >
-        <table id="previously" class="responsive-table">
-          <thead>
-            <th scope="col">Name</th>
-            <th scope="col">Models</th>
-            <th scope="col">Attacks</th>
-            <th scope="col">To Hit</th>
-            <th scope="col">Reroll</th>
-            <th scope="col">Wound</th>
-            <th scope="col">Reroll</th>
-            <th scope="col">Rend</th>
-            <th scope="col">Damage</th>
-          </thead>
-        </table>
-      </div>
-      <div class="container" >
+  <div style="padding: 2; width: 100%; display: inline-flex; flex-direction: column; flex-wrap: wrap; flex-grow:0;">
+    <div class="container" style="flex-grow:1;">
         <table  class="responsive-table">
           <thead>
-            <th scope="col">Name:</th><td><input id="named" type="text" style="width: 250px" value="My Unit" /></input></td><td><button onclick="clearEntries()" >x</button></td>
+            <th colspan="8"><input id="named" type="text" style="width: 250px" value="My Unit" /></input></th><th>^</th>
           </thead>
-        <table id='inputTable' class="responsive-table">
           <thead>
             <th scope="col">Models</th>
             <th scope="col">Attacks</th>
@@ -54,293 +40,64 @@
             <td><input class="woundReroll"  type="checkbox" /></td>
             <td><input class="rend" type="number" style="width: 50px" value="0"/></td>
             <td><input class="damage" type="text" style="width: 50px" value="1"/></input></td>
-            <td><button onclick="addEntry()" >+</button></td>
+            <td >
+              <button class="icon-btn add-btn">
+                <div class="add-icon"></div>
+              </button>
+              <button class="icon-btn add-btn">
+              </button>
+            </td>
           </tr>
         </table>
-      </div>
-      <button class="button success" onclick="launch(); return false;" >Add</button>
-    </div>
-    <div style="padding: 2; flex-grow:0;">
-      <canvas id="global"></canvas>
     </div>
   </div>
   <div id="review" style="padding: 2; width: 100%; flex-grow:1; height:30% ">
   </div>
+  <div class="container" style="flex-grow:1;">
+    <table  class="responsive-table">
+      <thead>
+        <th scope="col" >name</th>
+        <th scope="col" >6+ normal</th>
+        <th scope="col" >6+ reroll 1</th>
+        <th scope="col" >6+ reroll</th>
+        <th scope="col" >5+ normal</th>
+        <th scope="col" >5+ reroll 1</th>
+        <th scope="col" >5+ reroll</th>
+        <th scope="col" >4+ normal</th>
+        <th scope="col" >4+ reroll 1</th>
+        <th scope="col" >4+ reroll</th>
+        <th scope="col" >3+ normal</th>
+        <th scope="col" >3+ reroll 1</th>
+        <th scope="col" >3+ reroll</th>
+        <th scope="col" >2+ normal</th>
+        <th scope="col" >2+ reroll 1</th>
+        <th scope="col" >2+ reroll</th>
+      </thead>
+      <tr>
+        <td>My Unit</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+        <td>35-45</td>
+      </tr>
+    </table>
+  </div>
 </div>
 <script>
 
-var addEntry = function() {
-	const tr = document.createElement('tr');
-	tr.innerHTML = `
-		<td><input class="models" type="number" style="width: 50px" value="30" /></input></td>
-		<td><input class="attacks" type="text" style="width: 50px" value="1" /></input></td>
-		<td><input class="hit" type="number" style="width: 30px" value="4" /></input></td>
-		<td><input class="hitReroll" type="checkbox" /></td>
-		<td><input class="wound" type="number" style="width: 30px" value="4"/></input></td>
-		<td><input class="woundReroll"  type="checkbox" /></td>
-		<td><input class="rend" type="number" style="width: 50px" value="0"/></td>
-		<td><input class="damage" type="text" style="width: 50px" value="1"/></input></td>
-		<td><button onclick="addEntry()" >+</button><button onclick="clearEntry(this)" >x</button></td>
-	`;
-	document.querySelector("#inputTable > tbody").appendChild(tr);
-}
-
-var clearEntry = function(element) {
-	const tr= element.parentElement.parentElement;
-	tr.parentElement.removeChild(tr);
-}
-var clearEntries = function() {
-	document.querySelector("#named").value = "";
-	document.querySelector("#inputTable > tbody").innerHTML = '';
-	const tr = document.createElement('tr');
-	tr.innerHTML = `
-		<td><input class="models" type="number" style="width: 50px" value="30" /></input></td>
-		<td><input class="attacks" type="text" style="width: 50px" value="1" /></input></td>
-		<td><input class="hit" type="number" style="width: 30px" value="4" /></input></td>
-		<td><input class="hitReroll" type="checkbox" /></td>
-		<td><input class="wound" type="number" style="width: 30px" value="4"/></input></td>
-		<td><input class="woundReroll"  type="checkbox" /></td>
-		<td><input class="rend" type="number" style="width: 50px" value="0"/></td>
-		<td><input class="damage" type="text" style="width: 50px" value="1"/></input></td>
-		<td><button onclick="addEntry()" >+</button></td>
-	`;
-	document.querySelector("#inputTable > tbody").appendChild(tr);
-}
-
-var animateButton = function(e) {
-  e.preventDefault;
-  //reset animation
-  e.target.classList.remove('animate');
-
-  e.target.classList.add('animate');
-
-  e.target.classList.add('animate');
-  setTimeout(function(){
-    e.target.classList.remove('animate');
-  },6000);
-};
-
-var classname = document.getElementsByClassName("button");
-
-for (var i = 0; i < classname.length; i++) {
-  classname[i].addEventListener('click', animateButton, false);
-}
-
-const randomColor =  () => {
-	var o = Math.round, r = Math.random, s = 255;
-	return o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s);
-}
-
-var launch = () => {
-
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", 'https://cors-anywhere.herokuapp.com/https://anydice.com/calculator_limited.php', true);
-
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-	const named = document.querySelector("#named").value;
-
-	const models = [...document.querySelectorAll(".models")].map(element => element.value.toLowerCase());
-	const attacks = [...document.querySelectorAll(".attacks")].map(element => element.value.toLowerCase());
-	let hit = [...document.querySelectorAll(".hit")].map(element => element.value.toLowerCase());
-	let wound = [...document.querySelectorAll(".wound")].map(element => element.value.toLowerCase());
-	const rend = [...document.querySelectorAll(".rend")].map(element => element.value.toLowerCase());
-	const damage = [...document.querySelectorAll(".damage")].map(element => element.value.toLowerCase());
-
-	console.log(named, models, attacks, hit, wound, rend, damage);
-
-	const hitReroll = [...document.querySelectorAll(".hitReroll")].map(element => element.checked);
-	hitReroll.forEach( (reroll, i) => {
-		if (reroll) hit[i] += " reroll"
-	});
-
-	const woundReroll = [...document.querySelectorAll(".woundReroll")].map(element => element.checked);
-	woundReroll.forEach( (reroll, i) => {
-		if (reroll) wound[i] += " reroll"
-	});
-
-	const resumeTable = document.querySelector("#previously");
-	const tr = document.createElement('tr');
-	tr.innerHTML = `
-		<th rowspan='${models.length}'>${named}</th>
-		<td>${models[0]}</td>
-		<td>${attacks[0]}</td>
-		<td>${hit[0]}</td>
-		<td>${hitReroll[0]}</td>
-		<td>${wound[0]}</td>
-		<td>${woundReroll[0]}</td>
-		<td>${rend[0]}</td>
-		<td>${damage[0]}</td>
-	`;
-	resumeTable.appendChild(tr);
-	for(let i=1; i<models.length; i+=1) {
-		const tr = document.createElement('tr');
-		tr.innerHTML = `
-			<td>${models[i]}</td>
-			<td>${attacks[i]}</td>
-			<td>${hit[i]}</td>
-			<td>${hitReroll[i]}</td>
-			<td>${wound[i]}</td>
-			<td>${woundReroll[i]}</td>
-			<td>${rend[i]}</td>
-			<td>${damage[i]}</td>
-		`;
-		resumeTable.appendChild(tr);
-	}
-
-
-	resumeTable.appendChild
-
-	xhr.onreadystatechange = function() { //Appelle une fonction au changement d'état.
-		if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-			var result = JSON.parse(this.response);
-
-			const color = randomColor();
-
-			var labels = Array.from(Array(result.distributions.maxX).keys());
-
-			var atLeastData = [];
-			var data = [];
-			result.distributions.data.forEach( (ouptut, i) => {
-				data[i] = ouptut.map( element => element[1]);
-        var cummulative = 100;
-        atLeastData[i] = [];
-        data[i].forEach( (element, index) => {
-          cummulative -= element;
-          atLeastData[i][index] = cummulative;
-				});
-			});
-
-			chartResult.data.labels =  chartResult.data.labels.length < data[0].length ? Array.from(Array(data[0].length).keys()) : chartResult.data.labels ;
-			chartResult.data.datasets.push({
-				label: result.distributions.labels[0],
-				backgroundColor: `rgba(${color},0.3)`,
-				borderColor: `rgb(${color})`,
-				data: data[0],
-			});
-			chartResult.update();
-
-			chartAtLeast.data.labels =  chartAtLeast.data.labels.length < data[0].length ? Array.from(Array(data[0].length).keys()) : chartAtLeast.data.labels ;
-
-			chartAtLeast.data.datasets.push({
-				label: result.distributions.labels[0],
-				backgroundColor: `rgba(${color},0.3)`,
-				borderColor: `rgb(${color})`,
-				data: atLeastData[0],
-			});
-			chartAtLeast.update();
-
-			let caract = [];
-		  caract[0] = data[0].reduce((prev, element, index) => prev + element*index)/100;
-
-      atLeastData[0].forEach((current, i, data) => {
-        const previous = data[i-1];
-        if ( previous !== undefined && previous > 80 && current <= 80) {
-          const range = previous - current;
-          caract[2] = (i-1)*(1- (previous-80)/range) + i*( 1- (80-current)/range);
-        }
-      });
-      caract[1] = data[0].reduce((prev, element, index) => prev + element/100*(index - caract[0])*(index - caract[0]));
-      caract[1] = Math.sqrt(caract[1]);
-
-      atLeastData[0].forEach((current, i, data) => {
-        const previous = data[i-1];
-        if ( previous !== undefined && previous > 20 && current <= 20) {
-          const range = previous - current;
-          caract[3] = (i-1)*(1- (previous-20)/range) + i*( 1 - (20-current)/range);
-        }
-      });
-
-      console.log(caract)
-
-
-			chartGlobal.data.labels =  ['mean', 'std dev', '80%', '20%'];
-			chartGlobal.data.datasets.push( {
-				label: [result.distributions.labels[0]],
-				backgroundColor: `rgba(${color},0.3)`,
-				borderColor: `rgb(${color})`,
-				data: caract,
-			});
-			chartGlobal.update();
-		}
-	}
-
-	let output = `output ([${models[0]} do { ${attacks[0]} } attacks with [ ${hit[0]} ] hit [ ${wound[0]} ] wound { ${damage[0]} } damage])`;
-	for(let i=1; i<models.length; i+=1) {
-		output += ` + ([${models[i]} do { ${attacks[i]} } attacks with [ ${hit[i]} ] hit [ ${wound[i]} ] wound { ${damage[i]} } damage])`
-	}
-	output += `named "${named}"`;
-
-	const program =`
-		function: ROLL:n reroll BAD:s as REROLL:s {
-		  if ROLL = BAD { result: REROLL }
-		  result: ROLL
-		}
-
-		function : NUMBER:n {
-		  result:(d6>=NUMBER)
-		}
-
-		function : NUMBER:n reroll S:s {
-		  result:([d6 reroll S as d6]>=NUMBER)
-		}
-
-		function : NUMBER:n reroll {
-		  result:([d6 reroll {1..(NUMBER-1)} as d6]>=NUMBER)
-		}
-
-		function : save NUMBER:n {
-		  result:(d6<NUMBER)
-		}
-
-		function : save NUMBER:n reroll S:s {
-		  result:([d6 reroll S as d6]<NUMBER)
-		}
-
-		function : MODEL do ATTACK attacks with TO_HIT hit TO_WOUND wound DAMAGE damage {
-		  result: (MODELdATTACK)d(TO_HIT)d(TO_WOUND)*DAMAGE
-		}
-
-		${output}
-	`;
-	xhr.send("program="+encodeURIComponent(program));
-}
-
 const review = new Review(document.querySelector('#review'));
-review.addRoll('test', new DiceRoller().roll(30).success(4).success(4));
-
-var global = document.querySelector('#global').getContext('2d');
-global.clearRect(0, 0, document.querySelector('#global').width, document.querySelector('#global').height);
-var chartGlobal = new Chart(global, {
-	// The type of chart we want to create
-	type: 'bar',
-	data: {
-		datasets: []
-	},
-	// Configuration options go here
-	options: {
-    title: {
-      display: true,
-      text: "Resume",
-    },
-    scales: {
-      yAxes: [{
-        display: true,
-        ticks: {
-          min: 0,
-        },
-        scaleLabel: {
-          display: true,
-          labelString: 'Wounds'
-        },
-      }],
-    },
-		responsive: true,
-		maintainAspectRatio: false,
-	}
-});
-
-
+review.addRoll('test', new DiceRoller().roll(30).success(2).success(2));
 
 </script></body>
 
