@@ -41,10 +41,9 @@
             <td><input class="rend" type="number" style="width: 50px" value="0"/></td>
             <td><input class="damage" type="text" style="width: 50px" value="1"/></input></td>
             <td >
-              <button class="icon-btn add-btn">
+              <button class="icon-btn add-btn" onclick="addRoll()">
                 <div class="add-icon"></div>
-              </button>
-              <button class="icon-btn add-btn">
+                <div class="btn-txt">Roll</div>
               </button>
             </td>
           </tr>
@@ -95,9 +94,17 @@
   </div>
 </div>
 <script>
-
 const review = new Review(document.querySelector('#review'));
-review.addRoll('test', new DiceRoller().roll(30).success(2).success(2));
+
+function addRoll(){
+  const name = document.querySelector(' #named').value;
+  const model = document.querySelector('.models').value;
+  const att = document.querySelector('.attacks').value;
+  const hit = document.querySelector('.hit').value;
+  const wound = document.querySelector('.wound').value;
+
+  review.addRoll(name, new DiceRoller().roll(model*att).success(hit).success(wound));
+}
 
 </script></body>
 

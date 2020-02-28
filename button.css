@@ -13,6 +13,9 @@
   position: relative;
   transition: width 0.2s ease-in-out;
 }
+.add-btn:hover {
+  width: 80px;
+}
 .add-btn::before,
 .add-btn::after {
   transition: width 0.2s ease-in-out, border-radius 0.2s ease-in-out;
@@ -41,6 +44,12 @@
   opacity: 0;
   transition: opacity 0.2s;
 }
+
+.add-btn:hover::before,
+.add-btn:hover::after {
+  width: 2px;
+  border-radius: 1px;
+}
 .add-btn:hover .btn-txt {
   opacity: 1;
 }
@@ -64,4 +73,14 @@
   right: 11px;
   border-top-right-radius: 1px;
   border-bottom-right-radius: 1px;
+}
+.add-btn:hover .add-icon::before {
+  left: 7px;
+  height: 2px;
+  top: calc(50% - 1px);
+}
+.add-btn:hover .add-icon::after {
+  right: 7px;
+  height: 2px;
+  top: calc(50% - 1px);
 }

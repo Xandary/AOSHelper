@@ -69,6 +69,7 @@ class Review {
       backgroundColor: 'rgba(255,0,0,0.5)',
       data: data,
     });
+    this.distribution.update();
   }
 
   __addRoll(result) {
